@@ -1,14 +1,18 @@
-<html>
-<head>
-  <title>{{ result }}</title>
-</head>
-<body>
-    <form action="{{ url_for('search') }}" method=post>
-      <dl>
-        <dt>Search:
-        <dd><input type=text size=30 name=query>
-        <dd><input type=submit value=query>
-      </dl>
-    </form>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="container">
+    	<div class="starter-template">
+        	<h1>Skwiggle</h1>
+        	<p class="lead">Use this search engine for your academic needs!</p>
+	  	</div>
+      	<form role="form">
+			<div class="form-group">
+				<label for="query">Query</label>
+				<input type="text" class="form-control" id="query" placeholder="Enter query text">
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+    </div>
+{% endblock %}
+

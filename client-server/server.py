@@ -26,7 +26,7 @@ def search():
         results = s.query(request.form['query']) # basic query
     else:
         results = get_results() # test file
-    return render_template('search.html', results=get_results())
+    return render_template('search.html', results=results)
 
 @app.errorhandler(404)
 def page_not_found(e):
