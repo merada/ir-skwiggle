@@ -16,7 +16,8 @@ s = solr.SolrConnection(settings.SOLR_URL)
 
 #----- PAGES -------------------------------------
 @app.route("/")
-def hello():
+@app.route("/home")
+def home():
     return render_template('home.html')
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -26,14 +27,6 @@ def search():
     else:
         results = get_results() # test file
     return render_template('search.html', results=get_results())
-
-@app.route("/test")
-def test_bootstrap():
-    return render_template('test.html')
-
-@app.route("/layout")
-def test_layout():
-    return render_template('layout.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
