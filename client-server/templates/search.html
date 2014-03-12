@@ -5,13 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bootstrap 101 Template</title>
+    <title>Skwiggle</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="http://bootswatch.com/slate/bootstrap.min.css">
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -65,6 +65,18 @@
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
     </div><!-- /.container -->
+
+    <div class="container">
+        <ul>
+          {% for result in results %}
+            <li><h2>{{ result.id }}</h2></li>
+              {{ result['name'] }}
+              Hello world
+          {% else %}
+            <li><em>No results found.</em></li>
+          {% endfor %}
+        </ul>
+    </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
