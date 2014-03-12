@@ -1,18 +1,21 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <div class="container">
-    	<div class="starter-template">
-        	<h1>Skwiggle</h1>
-        	<p class="lead">Use this search engine for your academic needs!</p>
-	  	</div>
-      	<form role="form">
-			<div class="form-group">
-				<label for="query">Query</label>
-				<input type="text" class="form-control" id="query" placeholder="Enter query text">
-			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
-		</form>
+  <div class="container">
+    <div class="starter-template">
+      <h1>Skwiggle</h1>
+      <p class="lead">Use this search engine for your academic needs!</p>
+	</div>
+      <form role="form">
+      	<div class="col-lg-3">
+        </div>
+        <div class="form-group col-lg-6">
+          <input type="text" class="form-control" id="query" placeholder="Enter query text">
+          <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </div>
+      </form>
     </div>
 {% endblock %}
 
