@@ -18,6 +18,14 @@ s = solr.SolrConnection(settings.SOLR_URL)
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home(): 
+    if request.method == 'GET':
+        print "GET"
+        print request.form
+        #results = "RESULTS" #request.form['query'] #s.query(query)
+        #print "Got query"
+        #return render_template('search.html', results=results)
+    if request.method == 'POST':
+        return search_query(request.form)
     return render_template('home.html')
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -28,9 +36,10 @@ def search():
         results = get_results() # test file
     return render_template('search.html', results=results)
 
-@app.route('/search#<query>', methods=['GET', 'POST'])
-def search_query():
-    results = s.query(query)
+@app.route('/search', methods=['GET', 'POST'])
+def search_query(query):
+    results = get_results()
+    #results = s.query(query)
     return render_template('search.html', results=results)
 
 @app.route('/refined', methods=['GET', 'POST'])

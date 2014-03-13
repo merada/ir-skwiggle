@@ -1,26 +1,5 @@
 {% extends "layout.html" %}
 {% block title %}Search{% endblock %}
-{% block navbar %}
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
-      </div>
-      <div class="collapse navbar-collapse">
-        <form class="navbar-form navbar-left">
-          <input type="text" class="form-control col-lg-8" placeholder="Search" autofocus>
-          <button type="submit" class="btn btn-primary">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </form>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="{{ url_for('refined_search') }}">Refined search</a></li>
-          <li><a href="{{ url_for('about') }}">About</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-{% endblock %}
 
 {% block content %}
   <div class="container">
