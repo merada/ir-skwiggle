@@ -1,33 +1,36 @@
 {% extends "layout.html" %}
 {% block title %}Search{% endblock %}
-{% block content %}
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <form class="navbar-form navbar-left col-lg-8">
-            <input type="text" class="form-control" placeholder="Search" autofocus>
-            <button type="submit" class="btn btn-primary">
-              <span class="glyphicon glyphicon-search"></span>
-            </button>
-          </form>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('about') }}">About</a></li>
-          </ul>
-        </div>
+{% block navbar %}
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <form class="navbar-form navbar-left">
+          <input type="text" class="form-control col-lg-8" placeholder="Search" autofocus>
+          <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('refined_search') }}">Refined search</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+{% endblock %}
 
-    <div class="container">
-        <ul>
-          {% for result in results %}
-            <li><h2>{{ result.id }}</h2></li>
-              {{ result['name'] }}
-          {% else %}
-            <h3>No results found.</h3>
-          {% endfor %}
-        </ul>
-    </div>
+{% block content %}
+  <div class="container">
+    <ul>
+      {% for result in results %}
+        <li><h2>{{ result.id }}</h2></li>
+        {{ result['name'] }}
+      {% else %}
+        <h3>No results found.</h3>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

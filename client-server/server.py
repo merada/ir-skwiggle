@@ -33,6 +33,10 @@ def search_query():
     results = s.query(query)
     return render_template('search.html', results=results)
 
+@app.route('/refined', methods=['GET', 'POST'])
+def refined_search():
+    return render_template('refined_search.html')    
+
 @app.route('/about')
 def about():
     return render_template('about.html')
