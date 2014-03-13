@@ -4,7 +4,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Skwiggle</a>
+          <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
         </div>
         <div class="collapse navbar-collapse">
           <form class="navbar-form navbar-left col-lg-8">
@@ -14,7 +14,7 @@
             </button>
           </form>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#about">About</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
           </ul>
         </div>
       </div>
@@ -26,7 +26,7 @@
             <li><h2>{{ result.id }}</h2></li>
               {{ result['name'] }}
           {% else %}
-            <li><em>No results found.</em></li>
+            <h3>No results found.</h3>
           {% endfor %}
         </ul>
     </div>
