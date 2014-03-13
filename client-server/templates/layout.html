@@ -38,8 +38,8 @@
           <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
         </div>
         <div class="collapse navbar-collapse">
-          <form class="navbar-form navbar-left">
-            <input type="text" class="form-control" placeholder="Search" autofocus>
+          <form class="navbar-form navbar-left" method="POST">
+            <input type="text" class="form-control" id="query" placeholder="Search" autofocus>
             <button type="submit" class="btn btn-primary">
               <span class="glyphicon glyphicon-search"></span>
             </button>

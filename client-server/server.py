@@ -25,16 +25,18 @@ def home():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
+        query = request.form['query']
         results = s.query(request.form['query'])
     else:
+        query = "Local JSON file"
         results = get_results() # test file
-    return render_template('search.html', results=results)
+    return render_template('search.html', query=query, results=results)
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_query(query):
     results = get_results()
     #results = s.query(query)
-    return render_template('search.html', results=results)
+    return render_template('search.html', query=query, results=results)
 
 @app.route('/refined', methods=['GET', 'POST'])
 def refined_search():
