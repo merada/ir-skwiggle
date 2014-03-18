@@ -13,42 +13,49 @@ Bootstrap(app)
 
 # solr setup
 s = solr.SolrConnection(settings.SOLR_URL)
+solr_handler = solr.SearchHandler(s, settings.HANDLER_STRING)
 
 #----- PAGES -------------------------------------
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
 def home():
-    if request.method == 'POST':
-        return search_query(request.form)
     return render_template('home.html')
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    if request.method == 'GET':
-        query = request.form['query']
-        results = s.query('title:marmoset')
-    else:
-        query = "Local JSON file"
-        results = get_results() # test file
-    return render_template('search.html', query=query, results=results)
 
-@app.route('/search', methods=['GET', 'POST'])
-def search_query(query):
-    #results = get_results()
-    results = s.query('title:marmoset')
-    return render_template('search.html', query=query, results=results)
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+    print query
+    if query:
+        results = solr_handler.__call__(query)
+        return render_template('search.html', query=query, results=results)
+    #if request.method == 'POST':
+    #    query = request.form['query']
+    #    results = s.query('title:marmoset')
+    #    return render_template('search.html', query=query, results=results)
+    # set query to 'search for something'
+    return render_template('search.html')
+
 
 @app.route('/refined', methods=['GET', 'POST'])
 def refined_search():
     return render_template('refined_search.html')    
 
+
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html'), 400
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 #----- HELPERS ------------------------------------
 def get_results():
