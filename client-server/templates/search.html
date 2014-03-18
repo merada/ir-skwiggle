@@ -6,8 +6,8 @@
     Query:
     <ul>
       {% for result in results %}
-        <li><h2>{{ result.id }}</h2></li>
-        {{ result['name'] }}
+        <li><h2>{{ result.title[0][:50] }}...</h2></li>
+        {{ result.identifier }}
       {% else %}
         <h3>No results found.</h3>
       {% endfor %}
