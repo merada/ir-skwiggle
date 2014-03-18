@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}About{% endblock %}
+{% block navbar %}
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <form class="navbar-form navbar-left">
+          <input type="text" class="form-control col-lg-8" placeholder="Search" autofocus>
+          <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('refined_search') }}">Refined search</a></li>
+          <li class="active"><a href="{{ url_for('about') }}">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="col-lg-offset-1">
+  Add copyright and university logo, module information
+  <h2>Developed by:</h2>
+  <ul>
+    <li>Merada Richter</li> 
+    <li>Wesley Robinson</li> 
+    <li>Matthew Segers</li> 
+  </ul>
+  <h2>Technologies used:</h2>
+  <ul>
+    <li><a href="https://pypi.python.org/pypi/solrpy" target="blank">Solrpy 0.9.6</a></li> 
+    <li><a href="http://flask.pocoo.org/" target="blank">Flask 0.10</a></li> 
+    <li><a href="http://getbootstrap.com/" target="blank">Bootstrap 3.1.1</a></li> 
+  </ul>
+</div>
+{% endblock %}
