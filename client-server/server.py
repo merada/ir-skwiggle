@@ -27,9 +27,6 @@ def search():
     if request.method == 'GET':
         query = request.form['query']
         results = s.query('title:marmoset')
-        for r in results:
-            print r['title']
-        print "noooooo..."
     else:
         query = "Local JSON file"
         results = get_results() # test file
@@ -39,9 +36,6 @@ def search():
 def search_query(query):
     #results = get_results()
     results = s.query('title:marmoset')
-    for r in results:
-        print r['title']
-    print "noooooo..."
     return render_template('search.html', query=query, results=results)
 
 @app.route('/refined', methods=['GET', 'POST'])
