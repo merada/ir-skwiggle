@@ -31,12 +31,12 @@ def search():
     return render_template('search.html')
 
 
-@app.route('/refined', methods=['GET', 'POST'])
+@app.route('/refined', methods=['GET'])
 def refined_search():
     query = request.args.get('query', '')
     if query:
         results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
-        return render_template('refined_search.html', results=results)
+        return render_template('refined_search.html', query=query, results=results)
     return render_template('refined_search.html')    
 
 
