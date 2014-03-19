@@ -30,11 +30,6 @@ def search():
         results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
         print(results)
         return render_template('search.html', query=query, results=results)
-    #if request.method == 'POST':
-    #    query = request.form['query']
-    #    results = s.query('title:marmoset')
-    #    return render_template('search.html', query=query, results=results)
-    # set query to 'search for something'
     return render_template('search.html')
 
 
