@@ -36,22 +36,24 @@ def search():
         #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
         #             print(response.facet_counts['facet_fields'][facetfield][element])
         
-        return render_template('search.html', query=query, response=response)
-    #if request.method == 'POST':
-    #    query = request.form['query']
-    #    results = s.query('title:marmoset')
-    #    return render_template('search.html', query=query, results=results)
-    # set query to 'search for something'
 
+        return render_template('search.html', query=query, response=response)
     return render_template('search.html')
 
 
-@app.route('/refined', methods=['GET', 'POST'])
+@app.route('/refined', methods=['GET'])
 def refined_search():
-    query = request.args.get('query', '')
+    query = []
+    for k,v in request.args.items():
+        if v:
+            query.append('{}:{}'.format(k,v))
+    query = " AND ".join(query)
     if query:
-        results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
-        return render_template('refined_search.html', results=results)
+        print query
+        response = solr_handler.__call__(query)#, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        return render_template('refined_search.html', response=response)
+
+
     return render_template('refined_search.html')    
 
 
