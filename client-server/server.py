@@ -4,6 +4,7 @@ import solr
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask.ext.paginate import Pagination
 from flask_bootstrap import Bootstrap
 
 # app setup
@@ -25,26 +26,35 @@ def home():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')
+    page = int(request.args.get('page', 1))
+    rows = settings.RESULTS_PER_PAGE
+    start = (page-1) * rows
+    response = []
+    total = 0
     if query:
-        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'year_facet'])
-        return render_template('search.html', query=query, response=response)
-    return render_template('search.html')
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'year_facet'])
+        total = response.numFound
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('search.html', response=response, pagination=pagination)
 
 
 @app.route('/refined', methods=['GET'])
 def refined_search():
     query = []
     for k,v in request.args.items():
-        if v:
+        if v and k != "page":
             query.append('{}:{}'.format(k,v))
     query = " AND ".join(query)
+    page = int(request.args.get('page', 1))
+    rows = settings.RESULTS_PER_PAGE
+    start = (page-1) * rows
+    response = []
+    total = 0
     if query:
-        print query
-        response = solr_handler.__call__(query)#, facet='true', facet_field=['creator', 'publisher', 'contributor'])
-        return render_template('refined_search.html', response=response)
-
-
-    return render_template('refined_search.html')    
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        total = response.numFound
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('refined_search.html', response=response, pagination=pagination)    
 
 
 @app.route('/about')
