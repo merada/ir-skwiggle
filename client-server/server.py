@@ -25,8 +25,8 @@ def home():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')
-    print query
     if query:
+        
         response = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor', 'language'])
         
         return render_template('search.html', query=query, response=response)
@@ -35,11 +35,16 @@ def search():
     #    results = s.query('title:marmoset')
     #    return render_template('search.html', query=query, results=results)
     # set query to 'search for something'
+
     return render_template('search.html')
 
 
 @app.route('/refined', methods=['GET', 'POST'])
 def refined_search():
+    query = request.args.get('query', '')
+    if query:
+        results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        return render_template('refined_search.html', results=results)
     return render_template('refined_search.html')    
 
 
