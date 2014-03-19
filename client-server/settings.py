@@ -1,5 +1,10 @@
-#SOLR_URL='http://whiting.cs.uct.ac.za:8984/solr'
-SOLR_URL='http://127.0.0.1:38081/solr'
+SOLR_URL='http://whiting.cs.uct.ac.za:8984/solr'
 SERVER_PORT=8888
 HANDLER_STRING='/select'
 RESULTS_PER_PAGE=10
+FACET_FIELDS = ['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet']
+
+try:
+	from local_settings import *
+except ImportError:
+	pass

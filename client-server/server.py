@@ -10,6 +10,7 @@ from flask_bootstrap import Bootstrap
 # app setup
 app = Flask(__name__)
 app.debug = True
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 Bootstrap(app)
 
 # solr setup
@@ -32,8 +33,16 @@ def search():
     response = []
     total = 0
     if query:
-        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'year_facet'])
+        facet_fields = settings.FACET_FIELDS
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)
         total = response.numFound
+
+        #for facetfield in response.facet_counts['facet_fields']:
+        # for facetfield in response.facet_counts['facet_fields']:
+        #     for element in response.facet_counts['facet_fields'][facetfield]:
+        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
+        #             print(response.facet_counts['facet_fields'][facetfield][element])
+     
     pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
     return render_template('search.html', response=response, pagination=pagination)
 
@@ -51,7 +60,7 @@ def refined_search():
     response = []
     total = 0
     if query:
-        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=settings.FACET_FIELDS)
         total = response.numFound
     pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
     return render_template('refined_search.html', response=response, pagination=pagination)    
