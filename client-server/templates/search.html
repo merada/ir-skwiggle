@@ -2,39 +2,73 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  <div class="container">
-      {% for result in results %}
-      <blockquote>
-        {% if result.identifier %}
-			    <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a> </h4>
-        {% else %}
-          <h4><p class="text-primary">{{ result.title[0][:50] }}...</p></h4>
-        {% endif %}
+  <div class="container col-lg-3">
+    <div class="form-group">
+      <label for="select" class="col-lg-2 control-label">Selects</label>
+      <div class="col-lg-10">
 
-        <h6>
+        {% for facetfield in response.facet_counts['facet_fields'] %}
 
-        {% if result.creator %}
-          {{ result.creator[0] }}
-        {% else %}
-          <h5>Unknown creator</h5>
-        {% endif %}
+          {{ facetfield }}
+          <select class="form-control" id="select">
 
-        {% if result.description %}
-          <div class="field"> {{ result.description[0][:300] }} </div>
-        {% else %}
-          <div class="field"> No description found. </div>
-        {% endif %}
-        {% if result.identifier %}
-  				<div class="field"> <a class="text-success" href="{{ result.identifier[0] }}">{{ result.identifier[0] }}</a> </div>
-  			{% else %}
-  				<div class="field"> <p class="text-success"> No identifier found. </p></div>
-			  {% endif %}
+          {% for element in response.facet_counts['facet_fields'][facetfield] %}
 
-        </h6>
+            <option>{{ element }}</option>
+
+          {% endfor %}
+
+         </select>   
+
+         <br>
+
+        {% endfor %}
+
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+  </div>
+  <div class="container col-lg-9">
+      {% for result in response %}
+        <blockquote>
+          {% if result.identifier %}
+            <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a> </h4>
+          {% else %}
+            <h4><p class="text-primary">{{ result.title[0][:50] }}...</p></h4>
+          {% endif %}
+
+          <h6>
+
+          {% if result.creator %}
+            {{ result.creator[0] }}
+          {% else %}
+            <h5>Unknown creator</h5>
+          {% endif %}
+
+          {% if result.description %}
+            <div class="field"> {{ result.description[0][:300] }} </div>
+          {% else %}
+            <div class="field"> No description found. </div>
+          {% endif %}
+          {% if result.identifier %}
+            <div class="field"> <a class="text-success" href="{{ result.identifier[0] }}">{{ result.identifier[0] }}</a> </div>
+          {% else %}
+            <div class="field"> <p class="text-success"> No identifier found. </p></div>
+          {% endif %}
+
+          </h6>
 
         </blockquote>
-      {% else %}
-          <h3>No results found.</h3>        
+
+          {% else %}
+            <h3>No results found.</h3>        
       {% endfor %}
   </div>
 {% endblock %}
