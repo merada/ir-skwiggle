@@ -7,20 +7,33 @@
       <label for="select" class="col-lg-2 control-label">Selects</label>
       <div class="col-lg-10">
 
+<!-- So many for loops :( :( :(  -->
         {% for facetfield in response.facet_counts['facet_fields'] %}
+          {% for element in response.facet_counts['facet_fields'][facetfield] %}
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+              {{ facetfield }}
+              <select class="form-control" id="select" padding="10px">
+              {% break %}
+            {% endif %}
+          {% endfor %}
 
-          {{ facetfield }}
-          <select class="form-control" id="select">
-
+          <option>All</option>
           {% for element in response.facet_counts['facet_fields'][facetfield] %}
 
-            <option>{{ element }}</option>
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+            <option>{{ element }} ({{response.facet_counts['facet_fields'][facetfield][element]}})</option>
+            {% endif %}
 
           {% endfor %}
 
-         </select>   
+         </select>
 
-         <br>
+         {% for element in response.facet_counts['facet_fields'][facetfield] %}
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+              <br>
+              {% break %}
+            {% endif %}
+          {% endfor %}
 
         {% endfor %}
 

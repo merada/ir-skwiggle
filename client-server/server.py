@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap
 # app setup
 app = Flask(__name__)
 app.debug = True
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 Bootstrap(app)
 
 # solr setup
@@ -27,7 +28,13 @@ def search():
     query = request.args.get('query', '')
     if query:
 
-        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'year_facet'])
+        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
+
+        #for facetfield in response.facet_counts['facet_fields']:
+        # for facetfield in response.facet_counts['facet_fields']:
+        #     for element in response.facet_counts['facet_fields'][facetfield]:
+        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
+        #             print(response.facet_counts['facet_fields'][facetfield][element])
         
         return render_template('search.html', query=query, response=response)
     #if request.method == 'POST':
