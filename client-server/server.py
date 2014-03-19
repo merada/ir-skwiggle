@@ -28,6 +28,7 @@ def search():
     if query:
 
         response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'language_facet'])
+        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'year_facet'])
         
         return render_template('search.html', query=query, response=response)
     #if request.method == 'POST':
