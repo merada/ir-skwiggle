@@ -5,11 +5,21 @@
   <div class="container">
       {% for result in results %}
         <blockquote>
-          <h3><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a></h3>
-          {{ result.identifier[0] }}
-        </blockquote>
-      {% else %}
-        <h3>No results found.</h3>
+          <h4><a href="{{ result.identifier[1] }}">{{ result.title[0][:50] }}...</a></h4>
+            <h6>
+              {% for i in result.creator %}
+                {{ i }}
+              {% else %}
+                <h5>Unknown creator</h5>
+              {% endfor %}
+              {% if result.description %}
+                <div class="field"> {{ result.description[0][:500] }} </div>
+              {% endif %}
+              <div class="field"> <a class="text-success" href="{{ result.identifier[1] }}">{{ result.identifier[1] }}</a> </div>
+            </h6>
+          </blockquote>
+          {% else %}
+            <h3>No results found.</h3>        
       {% endfor %}
   </div>
 {% endblock %}

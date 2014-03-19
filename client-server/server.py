@@ -28,6 +28,7 @@ def search():
     print query
     if query:
         results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        print(results)
         return render_template('search.html', query=query, results=results)
     #if request.method == 'POST':
     #    query = request.form['query']
