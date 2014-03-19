@@ -46,21 +46,21 @@ def search():
     pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
     return render_template('search.html', response=response, pagination=pagination)
 
-@app.route('/searchFacet', methods=['GET'])
-def searchFacet():
-    # query = request.args.get('query', '')
-    # if query:
+@app.route('/search_facet', methods=['GET'])
+def search_facet():
+    query = request.args.get('query', '')
+    if query:
 
-    #     response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
+        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
 
-    #     #for facetfield in response.facet_counts['facet_fields']:
-    #     # for facetfield in response.facet_counts['facet_fields']:
-    #     #     for element in response.facet_counts['facet_fields'][facetfield]:
-    #     #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
-    #     #             print(response.facet_counts['facet_fields'][facetfield][element])
+        #for facetfield in response.facet_counts['facet_fields']:
+        # for facetfield in response.facet_counts['facet_fields']:
+        #     for element in response.facet_counts['facet_fields'][facetfield]:
+        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
+        #             print(response.facet_counts['facet_fields'][facetfield][element])
         
 
-    #     return render_template('search.html', query=query, response=response)
+        return render_template('search.html', query=query, response=response)
     return render_template('search.html')
 
 
