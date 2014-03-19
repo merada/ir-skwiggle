@@ -2,8 +2,41 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  <div class="container">
-      {% for result in results %}
+  <div class="container col-lg-3">
+    <div class="form-group">
+      <label for="select" class="col-lg-2 control-label">Selects</label>
+      <div class="col-lg-10">
+
+        {% for facetfield in response.facet_counts['facet_fields'] %}
+
+          {{ facetfield }}
+          <select class="form-control" id="select">
+
+          {% for element in response.facet_counts['facet_fields'][facetfield] %}
+
+            <option>{{ element }}</option>
+
+          {% endfor %}
+
+         </select>   
+
+         <br>
+
+        {% endfor %}
+
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+  </div>
+  <div class="container col-lg-9">
+      {% for result in response %}
         <blockquote>
           <h4><a href="{{ result.identifier[1] }}">{{ result.title[0][:50] }}...</a></h4>
             <h6>
@@ -19,7 +52,7 @@
             </h6>
           </blockquote>
           {% else %}
-            <h3>No results found.</h3>        
+            <h3>Wesley is so hot rawr</h3>        
       {% endfor %}
   </div>
 {% endblock %}
