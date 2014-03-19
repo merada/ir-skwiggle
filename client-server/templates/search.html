@@ -39,7 +39,10 @@
       {% for result in response %}
         <blockquote>
           {% if result.identifier %}
-            <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a> </h4>
+            <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}
+              {% if result.title[0][50:51] %} 
+                ...
+              {% endif %}</a> </h4>
           {% else %}
             <h4><p class="text-primary">{{ result.title[0][:50] }}...</p></h4>
           {% endif %}
