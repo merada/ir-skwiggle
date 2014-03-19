@@ -2,35 +2,46 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  <div class="container col-lg-3">
+  <div class="container col-lg-2">
     <div class="form-group">
       <label for="select" class="col-lg-2 control-label">Selects</label>
       <div class="col-lg-10">
 
+<!-- So many for loops :( :( :(  -->
         {% for facetfield in response.facet_counts['facet_fields'] %}
+          {% for element in response.facet_counts['facet_fields'][facetfield] %}
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+              {{ facetfield }}
+              <select class="form-control" id="select" padding="10px">
+              {% break %}
+            {% endif %}
+          {% endfor %}
 
-          {{ facetfield }}
-          <select class="form-control" id="select">
-
+          <option>All</option>
           {% for element in response.facet_counts['facet_fields'][facetfield] %}
 
-            <option>{{ element }}</option>
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+            <option>{{ element }} ({{response.facet_counts['facet_fields'][facetfield][element]}})</option>
+            {% endif %}
 
           {% endfor %}
 
-         </select>   
+         </select>
 
-         <br>
+         {% for element in response.facet_counts['facet_fields'][facetfield] %}
+            {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
+              <br>
+              {% break %}
+            {% endif %}
+          {% endfor %}
 
         {% endfor %}
 
       </div>
     </div>
     <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
         <button class="btn btn-default">Cancel</button>
         <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
     </div>
   </fieldset>
 </form>
