@@ -3,13 +3,13 @@
 
 {% block content %}
   <div class="container">
-    <ul>
       {% for result in results %}
-        <li><h2><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a></h2></li>
-        {{ result.identifier[0] }}
+        <blockquote>
+          <h3><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a></h3>
+          {{ result.identifier[0] }}
+        </blockquote>
       {% else %}
         <h3>No results found.</h3>
       {% endfor %}
-    </ul>
   </div>
 {% endblock %}

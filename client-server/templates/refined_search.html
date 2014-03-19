@@ -21,6 +21,53 @@
       </div>
     </div>
 {% endblock %}
+
 {% block content %}
-Some content here
+  <!-- FILTERS -->
+  <div class="col-lg-1"><!-- blank for spacing --></div>
+  <div class="well bs-component col-lg-10">
+    <form class="form-horizontal">
+      <fieldset>
+        <legend>Refine your search</legend>
+        <div class="row">
+          <div class="form-group col-lg-6">
+            <label for="subject" class="col-lg-2 control-label">Title</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm" id="title" placeholder="Title">
+            </div>
+          </div>
+          <div class="form-group col-lg-6">
+            <label for="author" class="col-lg-2 control-label">Author(s)</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm" id="author" placeholder="Author(s)">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-6">
+            <label for="subject" class="col-lg-2 control-label">Subject</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm" id="subject" placeholder="Subject">
+            </div>
+          </div>
+          <div class="form-group col-lg-6">
+            <div class="col-lg-8"><!-- blank for spacing --></div>
+            <button class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  
+  <!-- RESULTS -->
+  <div class="container">
+    {% for result in results %}
+      <blockquote>
+        <h2><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a></h2>
+        {{ result.identifier[0] }}
+      </blockquote>
+    {% else %}
+    {% endfor %}
+  </div>
 {% endblock %}
