@@ -33,10 +33,17 @@ def search():
 
 @app.route('/refined', methods=['GET'])
 def refined_search():
-    query = request.args.get('query', '')
+    query = []
+    for k,v in request.args.items():
+        if v:
+            query.append('{}:{}'.format(k,v))
+    query = " AND ".join(query)
     if query:
-        results = solr_handler.__call__(query, facet='true', facet_field=['creator', 'publisher', 'contributor'])
-        return render_template('refined_search.html', query=query, results=results)
+        print query
+        response = solr_handler.__call__(query)#, facet='true', facet_field=['creator', 'publisher', 'contributor'])
+        return render_template('refined_search.html', response=response)
+
+
     return render_template('refined_search.html')    
 
 
