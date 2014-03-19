@@ -3,13 +3,23 @@
 
 {% block content %}
   <div class="container">
-    <ul>
       {% for result in results %}
-        <li><h2><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a></h2></li>
-        {{ result.identifier[0] }}
-      {% else %}
-        <h3>No results found.</h3>
+        <blockquote>
+          <h4><a href="{{ result.identifier[1] }}">{{ result.title[0][:50] }}...</a></h4>
+            <h6>
+              {% for i in result.creator %}
+                {{ i }}
+              {% else %}
+                <h5>Unknown creator</h5>
+              {% endfor %}
+              {% if result.description %}
+                <div class="field"> {{ result.description[0][:500] }} </div>
+              {% endif %}
+              <div class="field"> <a class="text-success" href="{{ result.identifier[1] }}">{{ result.identifier[1] }}</a> </div>
+            </h6>
+          </blockquote>
+          {% else %}
+            <h3>No results found.</h3>        
       {% endfor %}
-    </ul>
   </div>
 {% endblock %}
