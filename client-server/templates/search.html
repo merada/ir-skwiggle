@@ -3,47 +3,49 @@
 
 {% block content %}
   <div class="container col-lg-2">
-{% if facet_counts %}
-  <form class="form-horizontal" action="{{ url_for('search') }}">
-    <div class="form-group">
-      <div class="col-lg-10">
-        <input type="hidden" value="{{ request.args.get('query', '') }}" name="query">
-        <!-- So many for loops :( :( :(  -->
-        {% for facetfield in facet_counts['facet_fields'] %}
-        {% for element in facet_counts['facet_fields'][facetfield] %}
-        {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
-        {{ facetfield }}
-        <select class="form-control" id="select" padding="10px" name="{{ facetfield.replace('_facet', '') }}">
-          {% break %}
-          {% endif %}
-          {% endfor %}
-          {% if request.args.get(facetfield.replace('_facet',''), False) %}
-          <option value="" label="All"></option>
-          {% else %}
-          <option value="" label="All" selected></option>
-          {% endif %}
+    {% if facet_counts %}
+      <form class="form-horizontal" action="{{ url_for('search') }}">
+        <div class="form-group">
+          <div class="col-lg-10">
+            <input type="hidden" value="{{ request.args.get('query', '') }}" name="query">
+            {% for facetfield in facet_counts['facet_fields'] %}
+              {% for element in facet_counts['facet_fields'][facetfield] %}
+                {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
+                  {{ facetfield }}
+                  <select class="form-control" id="select" padding="10px" name="{{ facetfield.replace('_facet', '') }}">
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+              {% if request.args.get(facetfield.replace('_facet',''), False) %}
+                <option value="" label="All"></option>
+              {% else %}
+                <option value="" label="All" selected></option>
+              {% endif %}
+            {% for element in facet_counts['facet_fields'][facetfield] %}
+              {% if element.strip() and facet_counts['facet_fields'][facetfield][element] > 0 %}
+                {% if request.args.get(facetfield.replace('_facet', ''), '') == element %}
+                  <option selected value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
+                {% else %}
+                  <option value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
+                {%endif %}
+              {% endif %}
+            {% endfor %}
+          </select>
           {% for element in facet_counts['facet_fields'][facetfield] %}
-          {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
-          {% if request.args.get(facetfield.replace('_facet', ''), '') == element %}
-          <option selected value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
-          {% else %}
-          <option value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
-          {%endif %}
-          {% endif %}
+            {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
+              <br>
+              {% break %}
+            {% endif %}
           {% endfor %}
-        </select>
-        {% for element in facet_counts['facet_fields'][facetfield] %}
-        {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
-        <br>
-        {% break %}
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
     </div>
     <div class="form-group">
-      <button class="btn btn-default" margin-left="23px">Cancel</button>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="col-lg-1"><!-- blank for spacing --></div>
+      <div class="col-lg-11">
+        <button class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
     </div>
   </form>
 {% endif %}
