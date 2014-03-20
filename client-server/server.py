@@ -15,6 +15,7 @@ Bootstrap(app)
 # solr setup
 s = solr.SolrConnection(settings.SOLR_URL)
 solr_handler = solr.SearchHandler(s, settings.HANDLER_STRING)
+spell_handler = solr.SearchHandler(s, settings.SPELL_HANDLER_STRING)
 
 #----- PAGES -------------------------------------
 @app.route('/', methods=['GET'])
@@ -26,18 +27,24 @@ def home():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')
+    spell = request.args.get('spell', '')
     if query:
 
-        response = solr_handler.__call__(query, facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
+        response = solr_handler.__call__(query, qt='spellchecker', spellcheck='true', facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
+
+        response2 = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
 
         #for facetfield in response.facet_counts['facet_fields']:
         # for facetfield in response.facet_counts['facet_fields']:
         #     for element in response.facet_counts['facet_fields'][facetfield]:
         #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
-        #             print(response.facet_counts['facet_fields'][facetfield][element])
-        
+        #             print(response.facet_counts['facet_fields'][facetfield][element])        
 
-        return render_template('search.html', query=query, response=response)
+        print (query)
+
+        #return render_template('home.html')
+        return render_template('search.html', query=query, response=response, response2=response2)
+    #return render_template('home.html')
     return render_template('search.html')
 
 
