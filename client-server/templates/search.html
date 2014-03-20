@@ -50,13 +50,11 @@
 </div>
 
   <div class="container col-lg-9">
-    {% if spellchecks %}
-      {% if not spellchecks.spellcheck['suggestions']['correctlySpelled'] %}
-        <a class="text-info">Did you mean:</a>
-        <a href="{{ url_for('search') }}?query={{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}">
+    {% if spellchecks and spellchecks.spellcheck['suggestions'].get('collation') and not spellchecks.spellcheck['suggestions']['correctlySpelled'] %}
+      <a class="text-info">Did you mean:</a>
+      <a href="{{ url_for('search') }}?query={{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}">
           {{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}
         </a>
-      {% endif %}
     {% endif %}
 
     {% if response %}
