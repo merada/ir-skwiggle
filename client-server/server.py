@@ -4,6 +4,7 @@ import solr
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask.ext.paginate import Pagination
 from flask_bootstrap import Bootstrap
 
 # app setup
@@ -27,7 +28,28 @@ def home():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')
-    spell = request.args.get('spell', '')
+    page = int(request.args.get('page', 1))
+    rows = settings.RESULTS_PER_PAGE
+    start = (page-1) * rows
+    response = []
+    total = 0
+    if query:
+        facet_fields = settings.FACET_FIELDS
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)
+        total = response.numFound
+
+        #for facetfield in response.facet_counts['facet_fields']:
+        # for facetfield in response.facet_counts['facet_fields']:
+        #     for element in response.facet_counts['facet_fields'][facetfield]:
+        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
+        #             print(response.facet_counts['facet_fields'][facetfield][element])
+     
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('search.html', response=response, pagination=pagination)
+
+@app.route('/search_facet', methods=['GET'])
+def search_facet():
+    query = request.args.get('query', '')
     if query:
 
         response = solr_handler.__call__(query, qt='spellchecker', spellcheck='true', facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
@@ -52,16 +74,19 @@ def search():
 def refined_search():
     query = []
     for k,v in request.args.items():
-        if v:
+        if v and k != "page":
             query.append('{}:{}'.format(k,v))
     query = " AND ".join(query)
+    page = int(request.args.get('page', 1))
+    rows = settings.RESULTS_PER_PAGE
+    start = (page-1) * rows
+    response = []
+    total = 0
     if query:
-        print query
-        response = solr_handler.__call__(query)#, facet='true', facet_field=['creator', 'publisher', 'contributor'])
-        return render_template('refined_search.html', response=response)
-
-
-    return render_template('refined_search.html')    
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=settings.FACET_FIELDS)
+        total = response.numFound
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('refined_search.html', response=response, pagination=pagination)    
 
 
 @app.route('/about')
