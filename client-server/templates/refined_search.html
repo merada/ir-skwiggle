@@ -81,15 +81,6 @@
   
   <!-- RESULTS -->
   <div class="container">
-    {% if spellchecks %}
-      {% if not spellchecks.spellcheck['suggestions']['correctlySpelled'] %}
-        <a class="text-info">Did you mean:</a>
-        <a href="{{ url_for('search') }}?query={{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}">
-          {{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}
-        </a>
-      {% endif %}
-    {% endif %}
-
     {% if response %}
       {% for result in response %}
         <blockquote>

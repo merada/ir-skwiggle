@@ -36,23 +36,32 @@ def home():
 
 @app.route('/search', methods=['GET'])
 def search():
-    query = request.args.get('query', '')
+    query = []
+    for k,v in request.args.items():
+        if k == "page":
+            continue
+        elif k == "query":
+            query.append(v)
+        elif v:
+            query.append(u'{}:{}'.format(k,v))
+    query = u" AND ".join(query)
     page = int(request.args.get('page', 1))
     rows = settings.RESULTS_PER_PAGE
     start = (page-1) * rows
     response = []
+    spellchecks = []
+    facet_counts = []
     total = 0
 
     if query:
         facet_fields = settings.FACET_FIELDS
-        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)    
-        total = response.numFound
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)
         spellchecks = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
-        pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+        facet_counts = response.facet_counts
+        total = response.numFound
 
-        return render_template('search.html', query=query, response=response, spellchecks=spellchecks, pagination=pagination)
-
-    return render_template('search.html', response=response)
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('search.html', response=response, spellchecks=spellchecks, facet_counts=facet_counts, pagination=pagination)
 
 
 @app.route('/refined', methods=['GET'])
@@ -60,8 +69,8 @@ def refined_search():
     query = []
     for k,v in request.args.items():
         if v and k != "page":
-            query.append('{}:{}'.format(k,v))
-    query = " AND ".join(query)
+            query.append(u'{}:{}'.format(k,v))
+    query = u" AND ".join(query)
     page = int(request.args.get('page', 1))
     rows = settings.RESULTS_PER_PAGE
     start = (page-1) * rows
@@ -70,13 +79,9 @@ def refined_search():
     if query:
         response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=settings.FACET_FIELDS)
         total = response.numFound
-        spellchecks = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
-        pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
-
-        return render_template('refined_search.html', response=response, spellchecks=spellchecks, pagination=pagination)    
-
-    return render_template('refined_search.html', response=response)    
-
+            
+    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+    return render_template('refined_search.html', response=response, pagination=pagination)
 
 @app.route('/about')
 def about():

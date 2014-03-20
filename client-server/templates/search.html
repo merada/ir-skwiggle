@@ -2,43 +2,52 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  {% if query and response %}
   <div class="container col-lg-2">
-    <form class="form-horizontal" action="{{ url_for('search') }}">
-      <div class="form-group">
-        <label for="select" class="col-lg-2 control-label"></label>
-        <div class="col-lg-10">
-          {% for facetfield in response.facet_counts['facet_fields'] %}
-            {% for element in response.facet_counts['facet_fields'][facetfield] %}
-              {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
-                {{ facetfield }}
-                <select class="form-control" id="select" padding="10px">
-                {% break %}
-              {% endif %}
-            {% endfor %}
-            <option>All</option>
-            {% for element in response.facet_counts['facet_fields'][facetfield] %}
-              {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
-                <option>{{ element }} ({{response.facet_counts['facet_fields'][facetfield][element]}})</option>
-              {% endif %}
-            {% endfor %}
-            </select>
-            {% for element in response.facet_counts['facet_fields'][facetfield] %}
-              {% if response.facet_counts['facet_fields'][facetfield][element] > 0 %}
-                <br>
-                {% break %}
-              {% endif %}
-            {% endfor %}
+{% if facet_counts %}
+  <form class="form-horizontal" action="{{ url_for('search') }}">
+    <div class="form-group">
+      <div class="col-lg-10">
+        <input type="hidden" value="{{ request.args.get('query', '') }}" name="query">
+        <!-- So many for loops :( :( :(  -->
+        {% for facetfield in facet_counts['facet_fields'] %}
+        {% for element in facet_counts['facet_fields'][facetfield] %}
+        {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
+        {{ facetfield }}
+        <select class="form-control" id="select" padding="10px" name="{{ facetfield.replace('_facet', '') }}">
+          {% break %}
+          {% endif %}
           {% endfor %}
-        </div>
+          {% if request.args.get(facetfield.replace('_facet',''), False) %}
+          <option value="" label="All"></option>
+          {% else %}
+          <option value="" label="All" selected></option>
+          {% endif %}
+          {% for element in facet_counts['facet_fields'][facetfield] %}
+          {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
+          {% if request.args.get(facetfield.replace('_facet', ''), '') == element %}
+          <option selected value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
+          {% else %}
+          <option value="{{element}}">{{ element }} ({{facet_counts['facet_fields'][facetfield][element]}})</option>
+          {%endif %}
+          {% endif %}
+          {% endfor %}
+        </select>
+        {% for element in facet_counts['facet_fields'][facetfield] %}
+        {% if facet_counts['facet_fields'][facetfield][element] > 0 %}
+        <br>
+        {% break %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
       </div>
-      <div class="form-group">
-        <button class="btn btn-default" margin-left="23px">Cancel</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
-  {% endif %}
+    </div>
+    <div class="form-group">
+      <button class="btn btn-default" margin-left="23px">Cancel</button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+{% endif %}
+</div>
 
   <div class="container col-lg-9">
     {% if spellchecks %}
@@ -92,10 +101,8 @@
 
       {{ pagination.links|safe }}
     {% elif query %}
-      <div class="col-lg-1"><!-- blank for spacing --></div>
       <div class="col-lg-6"><h4>No results found.</h4></div>
     {% else %}
-      <div class="col-lg-1"><!-- blank for spacing --></div>
       <div class="col-lg-6"><h4>Here be no query ...</h4></div>
     {% endif %}
   </div>
