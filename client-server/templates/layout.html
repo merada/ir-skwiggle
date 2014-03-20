@@ -46,7 +46,8 @@
         </div>
         <div class="collapse navbar-collapse">
           <form class="navbar-form navbar-left" action="{{ url_for('search') }}" method="GET">
-            <input type="text" class="form-control" id="query" name="query" placeholder="Search" autofocus>
+            <input type="text" class="form-control" id="query" name="query" placeholder="Search" autofocus
+              value="{{ request.args.get('query', '') }}">
             <button type="submit" class="btn btn-primary">
               <span class="glyphicon glyphicon-search"></span>
             </button>

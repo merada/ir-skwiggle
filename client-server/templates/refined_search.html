@@ -81,12 +81,22 @@
   
   <!-- RESULTS -->
   <div class="container">
+    {% if spellchecks %}
+      {% if not spellchecks.spellcheck['suggestions']['correctlySpelled'] %}
+        <a class="text-info">Did you mean:</a>
+        <a href="{{ url_for('search') }}?query={{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}">
+          {{ spellchecks.spellcheck['suggestions']['collation']['collationQuery'] }}
+        </a>
+      {% endif %}
+    {% endif %}
+
+    {% if response %}
       {% for result in response %}
         <blockquote>
           {% if result.identifier %}
-            <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:50] }}...</a> </h4>
+            <h4><a href="{{ result.identifier[0] }}">{{ result.title[0][:100] }}...</a> </h4>
           {% else %}
-            <h4><p class="text-primary">{{ result.title[0][:50] }}...</p></h4>
+            <h4><p class="text-primary">{{ result.title[0][:100] }}...</p></h4>
           {% endif %}
 
           <h6>
@@ -112,9 +122,10 @@
 
         </blockquote>
 
-          {% else %}
-            <h3>No results found.</h3>        
+      {% else %}
+        <h3>No results found.</h3>        
       {% endfor %}
       {{ pagination.links|safe }}
+    {% endif %}
   </div>
 {% endblock %}

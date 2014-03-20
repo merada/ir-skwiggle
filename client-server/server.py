@@ -1,3 +1,12 @@
+# Skwiggle server
+# CS Honours
+#
+# Authors: Merada Richter
+#          Wesley Robinson
+#          Matthew Segers
+#
+# Date: 2014.03.20
+
 import json
 import settings
 import solr
@@ -33,41 +42,17 @@ def search():
     start = (page-1) * rows
     response = []
     total = 0
+
     if query:
         facet_fields = settings.FACET_FIELDS
-        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)
+        response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=facet_fields)    
         total = response.numFound
+        spellchecks = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
+        pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
 
-        #for facetfield in response.facet_counts['facet_fields']:
-        # for facetfield in response.facet_counts['facet_fields']:
-        #     for element in response.facet_counts['facet_fields'][facetfield]:
-        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
-        #             print(response.facet_counts['facet_fields'][facetfield][element])
-     
-    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
-    return render_template('search.html', response=response, pagination=pagination)
+        return render_template('search.html', query=query, response=response, spellchecks=spellchecks, pagination=pagination)
 
-@app.route('/search_facet', methods=['GET'])
-def search_facet():
-    query = request.args.get('query', '')
-    if query:
-
-        response = solr_handler.__call__(query, qt='spellchecker', spellcheck='true', facet='true', facet_field=['creator_facet', 'publisher_facet', 'contributor_facet', 'date_facet', 'language_facet', 'source_facet', 'type_facet', 'signature_facet'])
-
-        response2 = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
-
-        #for facetfield in response.facet_counts['facet_fields']:
-        # for facetfield in response.facet_counts['facet_fields']:
-        #     for element in response.facet_counts['facet_fields'][facetfield]:
-        #         if response.facet_counts['facet_fields'][facetfield][element] > 0:
-        #             print(response.facet_counts['facet_fields'][facetfield][element])        
-
-        print (query)
-
-        #return render_template('home.html')
-        return render_template('search.html', query=query, response=response, response2=response2)
-    #return render_template('home.html')
-    return render_template('search.html')
+    return render_template('search.html', response=response)
 
 
 @app.route('/refined', methods=['GET'])
@@ -85,8 +70,12 @@ def refined_search():
     if query:
         response = solr_handler.__call__(query, start=start, rows=rows, facet='true', facet_field=settings.FACET_FIELDS)
         total = response.numFound
-    pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
-    return render_template('refined_search.html', response=response, pagination=pagination)    
+        spellchecks = spell_handler.__call__(query, spellcheck_collate='true', spellcheck_count='2', spellcheck_maxCollations='1')
+        pagination = Pagination(page=page, per_page=rows, total=total, search=False, bs_version=3)
+
+        return render_template('refined_search.html', response=response, spellchecks=spellchecks, pagination=pagination)    
+
+    return render_template('refined_search.html', response=response)    
 
 
 @app.route('/about')

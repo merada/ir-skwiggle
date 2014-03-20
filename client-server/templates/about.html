@@ -7,8 +7,9 @@
         <a class="navbar-brand" href="{{ url_for('home') }}">Skwiggle</a>
       </div>
       <div class="collapse navbar-collapse">
-        <form class="navbar-form navbar-left">
-          <input type="text" class="form-control col-lg-8" placeholder="Search" autofocus>
+        <form class="navbar-form navbar-left" action="{{ url_for('search') }}" method="GET">
+          <input type="text" class="form-control" id="query" name="query" placeholder="Search" autofocus
+            value="{{ request.args.get('query', '') }}">
           <button type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-search"></span>
           </button>
@@ -23,19 +24,25 @@
 {% endblock %}
 
 {% block content %}
+  <div class="starter-template">
+    <h1>Skwiggle</h1>
+    <p class="lead">For all your academic needs!</p>
+  </div>
   <div class="col-lg-offset-1">
-  Add copyright and university logo, module information
-  <h2>Developed by:</h2>
-  <ul>
-    <li>Merada Richter</li> 
-    <li>Wesley Robinson</li> 
-    <li>Matthew Segers</li> 
-  </ul>
-  <h2>Technologies used:</h2>
-  <ul>
-    <li><a href="https://pypi.python.org/pypi/solrpy" target="blank">Solrpy 0.9.6</a></li> 
-    <li><a href="http://flask.pocoo.org/" target="blank">Flask 0.10</a></li> 
-    <li><a href="http://getbootstrap.com/" target="blank">Bootstrap 3.1.1</a></li> 
-  </ul>
-</div>
+    <h2>Developed by:</h2>
+    <ul>
+      <li>Merada Richter</li> 
+      <li>Wesley Robinson</li> 
+      <li>Matthew Segers</li> 
+    </ul>
+    <h2>Technologies used:</h2>
+    <ul>
+      <li><a href="https://pypi.python.org/pypi/solrpy" target="blank">Solrpy 0.9.6</a></li> 
+      <li><a href="http://flask.pocoo.org/" target="blank">Flask 0.10</a></li> 
+      <li><a href="http://getbootstrap.com/" target="blank">Bootstrap 3.1.1</a></li> 
+    </ul>
+    <br>
+    <h6>Copyright (c) 2014 University of Cape Town</h6>
+  
+  </div>
 {% endblock %}
